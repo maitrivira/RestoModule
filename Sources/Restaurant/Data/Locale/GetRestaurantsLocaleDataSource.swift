@@ -62,9 +62,7 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
         }
     }
     
-    public func addRestaurant(entities: RestaurantDomainModel) -> Observable<Bool> {
-        let convert = self._mapper.transformDomainToEntity(domain: entities)
-        
+    public func addRestaurant(entities: RestaurantModuleEntity) -> Observable<Bool> {
         return Observable<Bool>.create { observer in
           if let localDatabase = self._realm {
             do {
@@ -80,12 +78,12 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
                 }
               } else {
                 try localDatabase.write {
-                  localDatabase.add(convert)
+                  localDatabase.add(entities)
 
                   observer.onNext(true)
                   observer.onCompleted()
                   print("data has beeen saved to local DB")
-                  print(convert)
+                  print(entities)
                 }
               }
 

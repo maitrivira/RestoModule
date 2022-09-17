@@ -14,7 +14,6 @@ public struct GetSearchRestaurantsRepository<
 where
     RestaurantRemoteDataSource.Request == String,
     RestaurantRemoteDataSource.Response == [RestaurantResponse],
-    Transformer.Request == String,
     Transformer.Response == [RestaurantResponse],
     Transformer.Entity == [RestaurantModuleEntity],
     Transformer.Domain == [RestaurantDomainModel] {
