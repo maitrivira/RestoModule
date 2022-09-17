@@ -68,4 +68,19 @@ public struct RestaurantTransformer: Mapper {
         }
     }
     
+    public func transformDomainToEntity(domain: [RestaurantDomainModel]) -> [RestaurantModuleEntity] {
+        
+        return domain.map { result in
+            let newRestaurant = RestaurantModuleEntity()
+            newRestaurant.id = result.id
+            newRestaurant.name = result.name
+            newRestaurant.descriptions = result.descriptions
+            newRestaurant.pictureId = result.pictureId
+            newRestaurant.city = result.city
+            newRestaurant.rating = result.rating
+            return newRestaurant
+        }
+        
+    }
+    
 }

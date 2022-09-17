@@ -12,17 +12,19 @@ import Foundation
 
 public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
     
-    public typealias Request = Any
+    public typealias Request = RestaurantDomainModel
     public typealias Response = RestaurantModuleEntity
 
     private let _realm: Realm?
+    private let _mapper = RestaurantTransformer()
+    
     public init(realm: Realm?) {
         _realm = realm
     }
     
-    public func list(request: Any?) -> Observable<[RestaurantModuleEntity]> {
+    public func getRestaurants() -> Observable<[RestaurantModuleEntity]> {
         return Observable<[RestaurantModuleEntity]>.create { observer in
-            
+
             if let realm = self._realm {
                 let restaurants: Results<RestaurantModuleEntity> = {
                     realm.objects(RestaurantModuleEntity.self)
@@ -34,16 +36,77 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
                 observer.onError(DatabaseError.requestFailed)
             }
             return Disposables.create()
-            
+
         }
     }
     
-    public func add(entities: RestaurantModuleEntity) -> Observable<Bool> {
+    public func getRestaurant(request id: Int) -> Observable<Bool> {
+        return Observable<Bool>.create { observer in
+          if let localDatabase = self._realm {
+            do {
+              let getObjectById = localDatabase.objects(RestaurantModuleEntity.self).filter("id == %@", id).first
+
+              if getObjectById != nil {
+                observer.onNext(true)
+              } else {
+                observer.onNext(false)
+              }
+
+              observer.onCompleted()
+            }
+          } else {
+            observer.onError(DatabaseError.requestFailed)
+            print(DatabaseError.requestFailed)
+          }
+          return Disposables.create()
+        }
+    }
+    
+    public func addRestaurant(entities: RestaurantDomainModel) -> Observable<Bool> {
+        let convert = self._mapper.transformDomainToEntity(domain: entities)
+        
+        return Observable<Bool>.create { observer in
+          if let localDatabase = self._realm {
+            do {
+                let getObjectById = localDatabase.objects(RestaurantModuleEntity.self).filter("id == %@", convert).first
+
+              if getObjectById != nil {
+                try localDatabase.write {
+                  localDatabase.delete(getObjectById!)
+
+                  observer.onNext(true)
+                  observer.onCompleted()
+                  print("data has beeen deleted to local DB")
+                }
+              } else {
+                try localDatabase.write {
+                  localDatabase.add(convert)
+
+                  observer.onNext(true)
+                  observer.onCompleted()
+                  print("data has beeen saved to local DB")
+                  print(convert)
+                }
+              }
+
+            } catch {
+              observer.onError(DatabaseError.requestFailed)
+              print(DatabaseError.requestFailed)
+            }
+          } else {
+            observer.onError(DatabaseError.requestFailed)
+            print(DatabaseError.requestFailed)
+          }
+          return Disposables.create()
+        }
+    }
+    
+    public func removeRestaurant(id: Int) -> Observable<Bool> {
         return Observable<Bool>.create { observer in
             if let realm = self._realm{
                 do {
                     try realm.write {
-                        realm.add(entities, update: .all)
+                        realm.delete(realm.objects(RestaurantModuleEntity.self).filter("id=%@", id))
                         observer.onNext(true)
                         observer.onCompleted()
                     }
@@ -57,26 +120,4 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
         }
     }
     
-    public func get(request id: String) -> Observable<RestaurantModuleEntity> {
-        fatalError()
-    }
-    
-    public func delete(request data: RestaurantModuleEntity) -> Observable<Bool> {
-        return Observable<Bool>.create { observer in
-            if let realm = self._realm{
-                do {
-                    try realm.write {
-                        realm.delete(realm.objects(RestaurantModuleEntity.self).filter("id=%@", data.id))
-                        observer.onNext(true)
-                        observer.onCompleted()
-                    }
-                } catch {
-                    observer.onError(DatabaseError.requestFailed)
-                }
-            } else {
-                observer.onError(DatabaseError.requestFailed)
-            }
-            return Disposables.create()
-        }
-    }
 }
