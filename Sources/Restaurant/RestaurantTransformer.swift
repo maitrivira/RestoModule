@@ -15,7 +15,7 @@ public struct RestaurantTransformer: Mapper {
     
     public init() {}
     
-    public func transformResponseToEntity(request: Any?, response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
+    public func transformResponseToEntity(response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
         return response.map { result in
             let newRestaurant = RestaurantModuleEntity()
             newRestaurant.id = result.id ?? ""
@@ -28,7 +28,7 @@ public struct RestaurantTransformer: Mapper {
         }
     }
     
-    public func transformModelToEntity(request: Any?, response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
+    public func transformModelToEntity(response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
         
         return response.map { result in
             let newRestaurant = RestaurantModuleEntity()

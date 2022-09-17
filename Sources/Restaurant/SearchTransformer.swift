@@ -16,7 +16,7 @@ public struct SearchTransformer: Mapper {
     
     public init() {}
     
-    public func transformResponseToEntity(request: String?, response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
+    public func transformResponseToEntity(response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
         return response.map { result in
             let newRestaurant = RestaurantModuleEntity()
             newRestaurant.id = result.id ?? ""
@@ -29,7 +29,7 @@ public struct SearchTransformer: Mapper {
         }
     }
     
-    public func transformModelToEntity(request: String?, response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
+    public func transformModelToEntity(response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
         return response.map { result in
             let newRestaurant = RestaurantModuleEntity()
             newRestaurant.id = result.id ?? ""
