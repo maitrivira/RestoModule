@@ -17,3 +17,5 @@ public struct RestaurantDomainModel: Equatable, Identifiable {
     public let rating: Double
     
 }
+
+let emptyModel = RestaurantDomainModel(id: "", name: "", descriptions: "", pictureId: "", city: "", rating: 0.0)

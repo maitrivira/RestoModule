@@ -14,6 +14,7 @@ public struct AddFavouriteRepository<
 where
     RestaurantLocaleDataSource.Request == RestaurantDomainModel,
     RestaurantLocaleDataSource.Response == RestaurantModuleEntity,
+    Transformer.Request == RestaurantDomainModel,
     Transformer.Entity == RestaurantModuleEntity,
     Transformer.Domain == RestaurantDomainModel {
      
@@ -32,7 +33,8 @@ where
         }
         
         public func execute(request: RestaurantDomainModel?) -> Observable<Bool> {
-            return _localeDataSource.addRestaurant(entities: _mapper.transformModelToEntity(response: request))
+            let entities = _mapper.transformModelToEntity(request: request ?? emptyModel)
+            return _localeDataSource.addRestaurant(entities: entities)
         }
         
     }
