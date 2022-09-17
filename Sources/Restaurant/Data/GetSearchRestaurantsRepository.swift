@@ -36,7 +36,7 @@ where
 
         public func execute(request: String?) -> Observable<[RestaurantDomainModel]> {
             return _remoteDataSource.getRestaurants(request: request)
-                .map { _mapper.transformResponseToDomain(request: nil, response: $0) }
+                .map { _mapper.transformResponseToDomain(response: $0) }
         }
         
     }

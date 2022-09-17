@@ -56,7 +56,7 @@ public struct RestaurantTransformer: Mapper {
         }
     }
     
-    public func transformResponseToDomain(request: Any?, response: [RestaurantResponse]) -> [RestaurantDomainModel] {
+    public func transformResponseToDomain(response: [RestaurantResponse]) -> [RestaurantDomainModel] {
         return response.map { result in
             return RestaurantDomainModel(
                 id: result.id ?? "",
