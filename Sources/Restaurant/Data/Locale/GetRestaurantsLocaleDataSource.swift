@@ -68,24 +68,26 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
             do {
                 let getObjectById = localDatabase.objects(RestaurantModuleEntity.self).filter("id == %@", entities).first
 
-              if getObjectById != nil {
-                try localDatabase.write {
-                  localDatabase.delete(getObjectById!)
+                if let getObjectById = getObjectById {
+                    if getObjectById != nil {
+                      try localDatabase.write {
+                        localDatabase.delete(getObjectById)
 
-                  observer.onNext(true)
-                  observer.onCompleted()
-                  print("data has beeen deleted to local DB")
-                }
-              } else {
-                try localDatabase.write {
-                  localDatabase.add(entities)
+                        observer.onNext(true)
+                        observer.onCompleted()
+                        print("data has beeen deleted to local DB")
+                      }
+                    } else {
+                      try localDatabase.write {
+                        localDatabase.add(getObjectById)
 
-                  observer.onNext(true)
-                  observer.onCompleted()
-                  print("data has beeen saved to local DB")
-                  print(entities)
+                        observer.onNext(true)
+                        observer.onCompleted()
+                        print("data has beeen saved to local DB")
+                        print(entities)
+                      }
+                    }
                 }
-              }
 
             } catch {
               observer.onError(DatabaseError.requestFailed)
