@@ -9,6 +9,7 @@ import Core
 
 public struct RestaurantTransformer: Mapper {
     
+    public typealias Request = [RestaurantDomainModel]
     public typealias Response = [RestaurantResponse]
     public typealias Entity = [RestaurantModuleEntity]
     public typealias Domain = [RestaurantDomainModel]
@@ -28,19 +29,17 @@ public struct RestaurantTransformer: Mapper {
         }
     }
     
-    public func transformModelToEntity(response: [RestaurantResponse]) -> [RestaurantModuleEntity] {
-        
-        return response.map { result in
+    public func transformModelToEntity(request: [RestaurantDomainModel]) -> [RestaurantModuleEntity] {
+        return request.map { result in
             let newRestaurant = RestaurantModuleEntity()
-            newRestaurant.id = result.id ?? ""
-            newRestaurant.name = result.name ?? ""
-            newRestaurant.descriptions = result.descriptions ?? ""
-            newRestaurant.pictureId = result.pictureId ?? ""
-            newRestaurant.city = result.city ?? ""
-            newRestaurant.rating = result.rating ?? 0.0
+            newRestaurant.id = result.id
+            newRestaurant.name = result.name
+            newRestaurant.descriptions = result.descriptions
+            newRestaurant.pictureId = result.pictureId
+            newRestaurant.city = result.city
+            newRestaurant.rating = result.rating
             return newRestaurant
         }
-        
     }
     
     public func transformEntityToDomain(entity: [RestaurantModuleEntity]) -> [RestaurantDomainModel] {
