@@ -62,7 +62,7 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
         }
     }
     
-    public func addRestaurant(entities: RestaurantModuleEntity) -> Observable<Bool> {
+    public func addRestaurant(entities: RestaurantDomainModel) -> Observable<Bool> {
         return Observable<Bool>.create { observer in
           if let localDatabase = self._realm {
             do {
