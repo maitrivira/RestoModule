@@ -33,7 +33,6 @@ where
         }
         
         public func execute(request: RestaurantDomainModel?) -> Observable<Bool> {
-            let entities = _mapper.transformModelToEntity(request: request ?? emptyModel)
             return _localeDataSource.addRestaurant(entities: request ?? emptyModel)
         }
         
