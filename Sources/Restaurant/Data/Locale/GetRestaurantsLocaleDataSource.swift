@@ -23,6 +23,7 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
     }
     
     public func getRestaurants() -> Observable<[RestaurantModuleEntity]> {
+        print("masuk resto locale data source")
         return Observable<[RestaurantModuleEntity]>.create { observer in
 
             if let realm = self._realm {
@@ -31,6 +32,7 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
                         .sorted(byKeyPath: "id", ascending: true)
                 }()
                 observer.onNext(restaurants.toArray(ofType: RestaurantModuleEntity.self))
+                print("data resto", restaurants.toArray(ofType: RestaurantModuleEntity.self))
                 observer.onCompleted()
             } else {
                 observer.onError(DatabaseError.requestFailed)
