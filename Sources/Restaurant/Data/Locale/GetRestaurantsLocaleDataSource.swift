@@ -32,7 +32,7 @@ public struct GetRestaurantsLocaleDataSource: LocaleDataSource {
                         .sorted(byKeyPath: "id", ascending: true)
                 }()
                 observer.onNext(restaurants.toArray(ofType: RestaurantModuleEntity.self))
-                print("data resto", restaurants.toArray(ofType: RestaurantModuleEntity.self))
+                print("data resto", restaurants)
                 observer.onCompleted()
             } else {
                 observer.onError(DatabaseError.requestFailed)
